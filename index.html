@@ -161,11 +161,20 @@
             requestAnimationFrame(gameLoop);
         }
 
+        function fly() {
+            if (!isGameOver) {
+                bird.velocity = bird.lift; // Faz o pássaro voar ao toque ou clique
+            }
+        }
+
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && !isGameOver) {
-                bird.velocity = bird.lift; // Salta ao pressionar a barra de espaço
+            if (e.code === 'Space') {
+                fly();
             }
         });
+
+        // Adicionando suporte para toque em dispositivos móveis
+        window.addEventListener('touchstart', fly);
 
         restartBtn.addEventListener('click', resetGame);
 
