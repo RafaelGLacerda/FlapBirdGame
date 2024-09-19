@@ -63,11 +63,13 @@
         const canvas = document.getElementById('flappyBirdCanvas');
         const ctx = canvas.getContext('2d');
 
-        let bird = { x: 50, y: 150, width: 20, height: 20, gravity: 0.3, lift: -7, velocity: 0 }; // Gravidade reduzida
+        let isMobile = /Mobi|Android/i.test(navigator.userAgent); // Detecta se é um dispositivo móvel
+
+        let bird = { x: 50, y: 150, width: 20, height: 20, gravity: isMobile ? 0.1 : 0.3, lift: -7, velocity: 0 }; // Gravidade ajustada
         let pipes = [];
         let pipeWidth = 50;
         let pipeGap = 120;
-        let pipeSpeed = 2;
+        let pipeSpeed = isMobile ? 1 : 2; // Velocidade dos tubos ajustada
         let frameCount = 0;
         let isGameOver = false;
         let score = 0;
@@ -94,14 +96,12 @@
                 pipe.x -= pipeSpeed;
             });
 
-            // Remove o tubo quando ele sai da tela e aumenta a pontuação
             if (pipes.length && pipes[0].x + pipeWidth < 0) {
                 pipes.shift();
-                score++;  // Aumenta a pontuação ao passar pelo tubo
+                score++;
                 scoreDisplay.textContent = `Score: ${score}`;
             }
 
-            // Adiciona novos tubos
             if (frameCount % 100 === 0) {
                 const pipeTop = Math.random() * (canvas.height - pipeGap - 50) + 50;
                 const pipeBottom = canvas.height - pipeTop - pipeGap;
@@ -134,7 +134,7 @@
         }
 
         function resetGame() {
-            bird = { x: 50, y: 150, width: 20, height: 20, gravity: 0.3, lift: -7, velocity: 0 };
+            bird = { x: 50, y: 150, width: 20, height: 20, gravity: isMobile ? 0.1 : 0.3, lift: -7, velocity: 0 };
             pipes = [];
             frameCount = 0;
             score = 0;
@@ -164,29 +164,27 @@
 
         function fly() {
             if (!isGameOver) {
-                bird.velocity = bird.lift; // Faz o pássaro voar ao toque ou clique
+                bird.velocity = bird.lift;
             }
         }
 
-        // Detectar toques e cliques
         function addMobileSupport() {
             window.addEventListener('touchstart', (e) => {
-                e.preventDefault();  // Evita a rolagem ao tocar
+                e.preventDefault();
                 fly();
             });
 
             window.addEventListener('mousedown', (e) => {
-                fly();  // Suporte para cliques no desktop
+                fly();
             });
 
             window.addEventListener('keydown', (e) => {
                 if (e.code === 'Space') {
-                    fly();  // Faz o pássaro voar ao pressionar a barra de espaço
+                    fly();
                 }
             });
         }
 
-        // Previne o comportamento de scroll durante o toque na tela
         window.addEventListener('touchmove', function(e) {
             e.preventDefault();
         }, { passive: false });
