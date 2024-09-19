@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Flappy Bird Clone</title>
     <style>
         body {
@@ -13,6 +13,7 @@
             align-items: center;
             height: 100vh;
             background-color: #70c5ce;
+            overflow: hidden; /* Evita rolagem no celular */
         }
         canvas {
             border: 2px solid #000;
@@ -167,17 +168,32 @@
             }
         }
 
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
+        // Detectar toques e cliques
+        function addMobileSupport() {
+            window.addEventListener('touchstart', (e) => {
+                e.preventDefault();  // Evita a rolagem ao tocar
                 fly();
-            }
-        });
+            });
 
-        // Adicionando suporte para toque em dispositivos móveis
-        window.addEventListener('touchstart', fly);
+            window.addEventListener('mousedown', (e) => {
+                fly();  // Suporte para cliques no desktop
+            });
+
+            window.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    fly();  // Faz o pássaro voar ao pressionar a barra de espaço
+                }
+            });
+        }
+
+        // Previne o comportamento de scroll durante o toque na tela
+        window.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
 
         restartBtn.addEventListener('click', resetGame);
 
+        addMobileSupport();
         gameLoop();
     </script>
 </body>
