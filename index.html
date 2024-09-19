@@ -65,12 +65,11 @@
 
         let isMobile = /Mobi|Android/i.test(navigator.userAgent); // Detecta se é um dispositivo móvel
 
-        let bird = { x: 50, y: 150, width: 20, height: 20, gravity: isMobile ? 0.1 : 0.3, lift: isMobile ? -4 : -7, velocity: 0 }; // Gravidade e impulso ajustados
+        let bird = { x: 50, y: 150, width: 20, height: 20, gravity: isMobile ? 0.1 : 0.3, lift: -7, velocity: 0 }; // Gravidade ajustada
         let pipes = [];
         let pipeWidth = 50;
-        let pipeGap = isMobile ? 140 : 120; // Ajustado para dispositivos móveis
+        let pipeGap = 120;
         let pipeSpeed = isMobile ? 1 : 2; // Velocidade dos tubos ajustada
-        let pipeFrequency = isMobile ? 180 : 100; // Frequência dos tubos ajustada
         let frameCount = 0;
         let isGameOver = false;
         let score = 0;
@@ -103,7 +102,7 @@
                 scoreDisplay.textContent = `Score: ${score}`;
             }
 
-            if (frameCount % pipeFrequency === 0) {
+            if (frameCount % 100 === 0) {
                 const pipeTop = Math.random() * (canvas.height - pipeGap - 50) + 50;
                 const pipeBottom = canvas.height - pipeTop - pipeGap;
                 pipes.push({ x: canvas.width, top: pipeTop, bottom: pipeBottom });
@@ -135,7 +134,7 @@
         }
 
         function resetGame() {
-            bird = { x: 50, y: 150, width: 20, height: 20, gravity: isMobile ? 0.1 : 0.3, lift: isMobile ? -4 : -7, velocity: 0 };
+            bird = { x: 50, y: 150, width: 20, height: 20, gravity: isMobile ? 0.1 : 0.3, lift: -7, velocity: 0 };
             pipes = [];
             frameCount = 0;
             score = 0;
